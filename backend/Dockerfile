@@ -12,10 +12,7 @@ COPY .mvn .mvn
 COPY src src
 
 # Make Maven wrapper executable
-RUN chmod +x mvnw
-
-# Build application
-RUN ./mvnw clean package -DskipTests
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests
 
 # Stage 2: Runtime image
 FROM eclipse-temurin:17-jre
