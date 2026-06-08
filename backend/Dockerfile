@@ -1,29 +1,27 @@
-# Stage 1: Build the Spring Boot application
+# Build Stage
 FROM eclipse-temurin:17-jdk AS builder
 
 WORKDIR /app
 
-# Copy Maven wrapper and pom.xml
-COPY pom.xml .
-COPY mvnw .
-COPY .mvn .mvn
+# Copy all project files
+COPY . .
 
-# Copy source code
-COPY src src
+# Give execute permission to Maven wrapper
+RUN chmod +x mvnw
 
-# Make Maven wrapper executable
-RUN chmod +x mvnw && ./mvnw clean package -DskipTests
+# Build Spring Boot application
+RUN ./mvnw clean package -DskipTests
 
-# Stage 2: Runtime image
+# Runtime Stage
 FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-# Copy generated jar from builder stage
-COPY --from=builder /src/*.jar app.jar
+# Copy the generated jar
+COPY --from=builder /app/target/*.jar app.jar
 
 # Expose application port
 EXPOSE 7070
 
-# Start application
+# Run application
 ENTRYPOINT ["java","-jar","app.jar"]
