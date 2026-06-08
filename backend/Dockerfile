@@ -20,7 +20,7 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 # Copy generated jar from builder stage
-COPY --from=builder /app/target/employee_management_system-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /src/employee_management_system-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose application port
 EXPOSE 7070
